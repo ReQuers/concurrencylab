@@ -1,6 +1,7 @@
 package ua.rshu.concurrencylab;
 
 public class TicketOffice {
+    private final Object lock = new Object();
     private int ticketsLeft;
 
     public TicketOffice(int tickets) {
@@ -36,16 +37,20 @@ public class TicketOffice {
 
         // TODO: замініть цю тимчасову реалізацію на synchronized-блок.
         boolean success = false;
-        if (ticketsLeft > 0) {
-            ticketsLeft--;
-            success = true;
+        synchronized (lock) {
+            if (ticketsLeft > 0) {
+                ticketsLeft--;
+                success = true;
+            }
         }
-
         return result(request, success);
+
     }
 
     public int getTicketsLeft() {
-        return ticketsLeft;
+        synchronized (lock){
+            return ticketsLeft;
+        }
     }
 
     private BookingResult result(BookingRequest request, boolean success) {

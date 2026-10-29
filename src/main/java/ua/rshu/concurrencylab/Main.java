@@ -10,13 +10,15 @@ public class Main {
 
     public static void main(String[] args) {
         String mode = args.length == 0 ? "sequential" : args[0].toLowerCase();
+
+        int poolSize = args.length == 1 ? POOL_SIZE : Integer.parseInt(args[1]);
         List<BookingRequest> requests = createRequests();
         BookingSimulator simulator = new BookingSimulator();
 
         SimulationResult result = switch (mode) {
             case "sequential" -> simulator.runSequential(requests, TICKETS);
-            case "unsafe" -> simulator.runFixedPoolUnsafe(requests, TICKETS, POOL_SIZE);
-            case "safe" -> simulator.runFixedPoolSafe(requests, TICKETS, POOL_SIZE);
+            case "unsafe" -> simulator.runFixedPoolUnsafe(requests, TICKETS, poolSize);
+            case "safe" -> simulator.runFixedPoolSafe(requests, TICKETS, poolSize);
             case "virtual" -> simulator.runVirtualThreads(requests, TICKETS);
             default -> throw new IllegalArgumentException(
                     "Режими: sequential | unsafe | safe | virtual");

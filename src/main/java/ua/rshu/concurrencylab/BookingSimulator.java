@@ -24,30 +24,36 @@ public class BookingSimulator {
     public SimulationResult runFixedPoolUnsafe(List<BookingRequest> requests, int tickets, int poolSize) {
         TicketOffice office = new TicketOffice(tickets);
         long started = System.nanoTime();
-
-        // TODO 2.
-        // Створіть ExecutorService з фіксованим пулом потоків poolSize
-        // і передайте його в runConcurrent(...), використовуючи office::bookUnsafe.
-        throw new UnsupportedOperationException("TODO 2: реалізуйте fixed thread pool");
+        return runConcurrent(
+                "2. Fixed pool UNSAFE (" + poolSize + " потоків)",
+                requests, office, started,
+                Executors.newFixedThreadPool(poolSize),
+                office::bookUnsafe
+        );
     }
 
     public SimulationResult runFixedPoolSafe(List<BookingRequest> requests, int tickets, int poolSize) {
         TicketOffice office = new TicketOffice(tickets);
         long started = System.nanoTime();
 
-        // TODO 3.
-        // Повторіть попередній сценарій, але використайте office::bookSafe.
-        throw new UnsupportedOperationException("TODO 3: використайте потокобезпечне бронювання");
+        return runConcurrent(
+                "3. Fixed pool SAFE (" + poolSize + " потоків)",
+                requests, office, started,
+                Executors.newFixedThreadPool(poolSize),
+                office::bookSafe
+        );
     }
 
     public SimulationResult runVirtualThreads(List<BookingRequest> requests, int tickets) {
         TicketOffice office = new TicketOffice(tickets);
         long started = System.nanoTime();
 
-        // TODO 4.
-        // Створіть Executors.newVirtualThreadPerTaskExecutor()
-        // і передайте executor у runConcurrent(...), використовуючи office::bookSafe.
-        throw new UnsupportedOperationException("TODO 4: реалізуйте virtual threads");
+        return runConcurrent(
+          "4.Virtual threads (safe)",
+                requests,office,started,
+                Executors.newVirtualThreadPerTaskExecutor(),
+                office::bookSafe
+        );
     }
 
     /**
